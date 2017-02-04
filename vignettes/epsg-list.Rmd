@@ -1,0 +1,28 @@
+---
+title: "Lots of projections"
+author: "Michael Sumner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lots of projections}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r}
+library(cartogony)
+library(dplyr)
+library(sf)
+map <- world %>% select(NAME, POP2005)
+data("epsg")
+data("world")
+for (i in sample(nrow(epsg), 100)) {
+  x <- try(st_transform(map, st_crs(epsg$prj4[i])))
+  
+  y <- try(plot(x))
+  if (!inherits(y, "try-error")) text(0, 0, epsg$prj4[i])
+}
+
+
+```
